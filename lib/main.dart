@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formlogin/register.dart';
+import 'package:formlogin/bloc/login_bloc.dart';
 
 import 'menu_utama.dart';
 
@@ -55,48 +56,68 @@ class _DataFormState extends State<DataForm> {
             Form(
                 child: Column(
                   children: <Widget>[
-                    TextFormField(
-
-                      decoration: InputDecoration(hintText: "Username"),
-                      controller: usernameController,
+                    StreamBuilder<String>(
+                      stream: loginBloc.email,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          onChanged: loginBloc.changeEmail,
+                          decoration: InputDecoration(hintText: "Username",errorText: snapshot.error),
+                          controller: usernameController,
+                        );
+                      }
                     ),
-                    TextFormField(
-                      obscureText: true,
-                      controller: passwordController,
-                      decoration: InputDecoration(hintText: "Password"),
+                    StreamBuilder<String>(
+                      stream: loginBloc.password,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          onChanged: loginBloc.changePassword,
+                          obscureText: true,
+                          controller: passwordController,
+                          decoration: InputDecoration(hintText: "Password",errorText: snapshot.error),
+                        );
+                      }
                     ),
-                    RaisedButton(
-                      child: Text("Login"),
-                      onPressed: () {
-                        setState(() {
-                          username = usernameController.text;
-                          password = passwordController.text;
-                        });
-                        if(username=='admin' && password=='admin') {
-                          Fluttertoast.showToast(
-                            msg: "Anda bERHASIL",
-                            toastLength: Toast.LENGTH_SHORT,
-                            webBgColor: "#e74c3c",
-                            timeInSecForIosWeb: 18,
+                    SizedBox(
+                      height: 8,
+                    ),
+                    StreamBuilder<bool>(
+                      stream: loginBloc.submitValid,
+                      builder: (context, snapshot) {
+                        return RaisedButton(
+                          child: Text("Login"),
+                          onPressed: () {
+                            /*setState(() {
+                              username = usernameController.text;
+                              password = passwordController.text;
+                            });
+                            if(username=='admin' && password=='admin') {
+                              Fluttertoast.showToast(
+                                msg: "Anda bERHASIL",
+                                toastLength: Toast.LENGTH_SHORT,
+                                webBgColor: "#e74c3c",
+                                timeInSecForIosWeb: 18,
 
-                          );
+                              );
 
-                          Navigator.push(context, MaterialPageRoute(builder:
-                              (context) => HomePage(username,password)));
+                              Navigator.push(context, MaterialPageRoute(builder:
+                                  (context) => HomePage(username,password)));
 
-                        }else
-                          {
+                            }else
+                              {
 
-                            Fluttertoast.showToast(
-                              msg: "Anda Tidak Terdaftar",
-                              toastLength: Toast.LENGTH_SHORT,
-                              webBgColor: "#e74c3c",
-                              timeInSecForIosWeb: 5,
-                            );
+                                Fluttertoast.showToast(
+                                  msg: "Anda Tidak Terdaftar",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  webBgColor: "#e74c3c",
+                                  timeInSecForIosWeb: 5,
+                                );
 
-                          }
+                              }*/
 
-                      },
+
+                          },
+                        );
+                      }
                     ),
 
 
